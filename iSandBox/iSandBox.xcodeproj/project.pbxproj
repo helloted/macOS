@@ -12,6 +12,7 @@
 		5D8655B7236FD3F3007D70ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5D8655B6236FD3F3007D70ED /* Assets.xcassets */; };
 		5D8655BA236FD3F3007D70ED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5D8655B8236FD3F3007D70ED /* Main.storyboard */; };
 		5D8655BD236FD3F3007D70ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8655BC236FD3F3007D70ED /* main.m */; };
+		5D8655C623702BE2007D70ED /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8655C423702BE2007D70ED /* GCDAsyncUdpSocket.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,8 @@
 		5D8655BB236FD3F3007D70ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5D8655BC236FD3F3007D70ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5D8655BE236FD3F3007D70ED /* iSandBox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iSandBox.entitlements; sourceTree = "<group>"; };
+		5D8655C423702BE2007D70ED /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
+		5D8655C523702BE2007D70ED /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +60,8 @@
 		5D8655AF236FD3F2007D70ED /* iSandBox */ = {
 			isa = PBXGroup;
 			children = (
+				5D8655C523702BE2007D70ED /* GCDAsyncUdpSocket.h */,
+				5D8655C423702BE2007D70ED /* GCDAsyncUdpSocket.m */,
 				5D8655B0236FD3F2007D70ED /* AppDelegate.h */,
 				5D8655B1236FD3F2007D70ED /* AppDelegate.m */,
 				5D8655B3236FD3F2007D70ED /* ViewController.h */,
@@ -139,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D8655C623702BE2007D70ED /* GCDAsyncUdpSocket.m in Sources */,
 				5D8655B5236FD3F2007D70ED /* ViewController.m in Sources */,
 				5D8655BD236FD3F3007D70ED /* main.m in Sources */,
 				5D8655B2236FD3F2007D70ED /* AppDelegate.m in Sources */,
