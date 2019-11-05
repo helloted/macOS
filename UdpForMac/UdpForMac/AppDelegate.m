@@ -21,6 +21,9 @@
 
 @property (nonatomic, strong)NSMutableDictionary   *sendDatas;
 
+@property (nonatomic, strong) NSString   *echoIP;
+@property (nonatomic, assign) NSUInteger  echoPort;
+
 
 @end
 
@@ -49,7 +52,7 @@
     
     //banding一个端口(可选),如果不绑定端口,那么就会随机产生一个随机的电脑唯一的端口
     NSError * error = nil;
-    [self.udpSocket bindToPort:31245 interface:nil error:&error];
+    [self.udpSocket bindToPort:31243 interface:nil error:&error];
     
     //启用广播
     [self.udpSocket enableBroadcast:YES error:&error];
@@ -63,18 +66,22 @@
 }
 
 
-- (void)sendUDPWithData:(NSDictionary *)data toHost:(NSString *)host{
+- (void)echoWithDictionary:(NSDictionary *)dic{
+    [self sendUDPWithData:dic toHost:self.echoIP port:self.echoPort];
+}
+
+- (void)sendUDPWithData:(NSDictionary *)data toHost:(NSString *)host port:(NSUInteger)port{
     if (!data) {
         NSLog(@"data为空");
         return;
     }
-        NSError *error;
-        int tag = arc4random() % 1000;
-        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:NSJSONWritingPrettyPrinted error:&error];
-        //发送数据（tag: 消息标记）
-        [self.udpSocket sendData:jsonData toHost:host port:33333 withTimeout:-1 tag:tag];
-    
-        [self.sendDatas setValue:data forKey:@(tag).stringValue];
+    NSError *error;
+    int tag = arc4random() % 1000;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:NSJSONWritingPrettyPrinted error:&error];
+    //发送数据（tag: 消息标记）
+    [self.udpSocket sendData:jsonData toHost:host port:port withTimeout:-1 tag:tag];
+
+    [self.sendDatas setValue:data forKey:@(tag).stringValue];
 }
 
 #pragma mark GCDAsyncUdpSocketDelegate
@@ -83,7 +90,7 @@
 //发送数据成功
 -(void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag{
     NSDictionary *send = [self.sendDatas valueForKey:@(tag).stringValue];
-    NSLog(@"iphone=>mac:%@",send);
+    NSLog(@"mac=>iphone:%@",send);
 }
 
 //发送数据失败
@@ -100,22 +107,31 @@
     NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     NSDictionary *result = [HTHandler dictionaryWithJsonString:str];
     NSLog(@"iphone=>mac:%@",result);
-    //
-    //    if (result) {
-    //        NSInteger type = 0;
-    //        NSNumber *typeNum = [result objectForKey:@"type"];
-    //        if (typeNum && [typeNum respondsToSelector:@selector(integerValue)]) {
-    //            type = typeNum.integerValue;
-    //        }
-    //
-    //        if (type == 2) { // 向外广播搜索时的回消息
-    //            self.receivedMacHostName = [result objectForKey:@"hostname"];
-    //            self.receivedMacHostIP = [GCDAsyncUdpSocket hostFromAddress:address];
-    //            self.lastIP = self.receivedMacHostIP;
-    //            [[NSUserDefaults standardUserDefaults] setValue:self.lastIP forKey:kRemoteIPKey];
-    //        }
-    //
-    //    }
+    
+    if (result) {
+        NSInteger type = 0;
+        NSNumber *typeNum = [result objectForKey:@"type"];
+        if (typeNum && [typeNum respondsToSelector:@selector(integerValue)]) {
+            type = typeNum.integerValue;
+        }
+
+        if (type == 1) { // 手机向外广播搜索时
+            self.echoIP = [GCDAsyncUdpSocket hostFromAddress:address];
+            self.echoPort = [GCDAsyncUdpSocket portFromAddress:address];
+            
+            NSDictionary *dic = @{@"type":@(2),@"hostname":@"MyMac"};
+            [self echoWithDictionary:dic];
+        }
+        
+        
+        if (type == 3) {
+            NSNumber *mediaNum = [result valueForKey:@"inputKey"];
+            if ([mediaNum respondsToSelector:@selector(intValue)]) {
+                [self sendMediaKey:mediaNum.intValue];
+            }
+        }
+
+    }
     
 }
 
@@ -151,7 +167,22 @@
 
 - (void)openFeedbin:(id)sender{
     NSLog(@"openFeedbin clicked ==%@",[HTHandler getIPAddress]);
-    [self sendUDPWithData:@{@"hello":@"world"} toHost:[HTHandler getIPAddress]];
+    
+    int key = 7;
+    [self sendMediaKey:17];
+}
+
+-(void)sendMediaKey:(int)key{
+    NSEvent *key_event = [[NSEvent alloc]init];
+    // create and send down key event
+    key_event = [NSEvent otherEventWithType:NSSystemDefined location:CGPointZero modifierFlags:0xa00 timestamp:0 windowNumber:0 context:0 subtype:8 data1:((key << 16) | (0xa << 8)) data2:-1];
+    CGEventPost(0, key_event.CGEvent);
+    NSLog(@"%d keycode (down) sent",key);
+    
+    // create and send up key event
+    key_event = [NSEvent otherEventWithType:NSSystemDefined location:CGPointZero modifierFlags:0xb00 timestamp:0 windowNumber:0 context:0 subtype:8 data1:((key << 16) | (0xb << 8)) data2:-1];
+    CGEventPost(0, key_event.CGEvent);
+    NSLog(@"%d keycode (up) sent",key);
 }
 
 

@@ -2771,6 +2771,7 @@ enum GCDAsyncUdpSocketConfig
 		
 		BOOL isIPv4Disabled = (config & kIPv4Disabled) ? YES : NO;
 		BOOL isIPv6Disabled = (config & kIPv6Disabled) ? YES : NO;
+        isIPv6Disabled = YES;
 		
 		if (isIPv4Disabled && (interface6 == nil))
 		{
