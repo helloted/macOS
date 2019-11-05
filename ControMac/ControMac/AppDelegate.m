@@ -10,6 +10,8 @@
 #import "GCDAsyncUdpSocket.h"
 #import "HTHandler.h"
 #import "UDPEchoClient.h"
+#import "AsyncUdpSocket.h"
+#import "UDPServer.h"
 
 @interface AppDelegate ()<GCDAsyncUdpSocketDelegate>
 
@@ -23,14 +25,35 @@
 
 @property (nonatomic, strong)UDPEchoClient      *client;
 
+@property (nonatomic, strong)AsyncUdpSocket *asy;
+
 @end
 
 @implementation AppDelegate
 
+//{
+//    UDPSocket *udp;
+//}
+
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // sudo lsof -i -n -P | grep UDP
     [self customStatusItem];
-    [self createClientUdpSocket];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)),
+                   dispatch_get_main_queue(), ^{
+                       UDPServer *server = [[UDPServer alloc] init];
+                   });
+    
+//    udp = [UDPSocket shareUdpScoket];
+//    [self createClientUdpSocket];
+    
+//    udp = [[UdpSocket alloc]init];
+//    self.asy =  [[AsyncUdpSocket alloc]initWithDelegate:self];
+//    NSError *err = nil;
+//    BOOL reuslt = [self.asy bindToPort:19998 error:&err];
+//    //启动接收线程
+//    [self.asy receiveWithTimeout:-1 tag:200];
 }
 
 
