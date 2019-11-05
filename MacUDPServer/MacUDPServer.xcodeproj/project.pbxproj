@@ -15,10 +15,7 @@
 		C3BE64021955ED330045CBAD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C3BE64011955ED330045CBAD /* AppDelegate.m */; };
 		C3BE64051955ED330045CBAD /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = C3BE64031955ED330045CBAD /* MainMenu.xib */; };
 		C3BE64071955ED330045CBAD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3BE64061955ED330045CBAD /* Images.xcassets */; };
-		C3BE640E1955ED330045CBAD /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3BE640D1955ED330045CBAD /* XCTest.framework */; };
 		C3BE640F1955ED330045CBAD /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3BE63EE1955ED330045CBAD /* Cocoa.framework */; };
-		C3BE64171955ED330045CBAD /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C3BE64151955ED330045CBAD /* InfoPlist.strings */; };
-		C3BE64191955ED330045CBAD /* MacUDPServerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C3BE64181955ED330045CBAD /* MacUDPServerTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,10 +46,6 @@
 		C3BE64041955ED330045CBAD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		C3BE64061955ED330045CBAD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C3BE640C1955ED330045CBAD /* MacUDPServerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacUDPServerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C3BE640D1955ED330045CBAD /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		C3BE64141955ED330045CBAD /* MacUDPServerTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MacUDPServerTests-Info.plist"; sourceTree = "<group>"; };
-		C3BE64161955ED330045CBAD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		C3BE64181955ED330045CBAD /* MacUDPServerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MacUDPServerTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +62,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3BE640F1955ED330045CBAD /* Cocoa.framework in Frameworks */,
-				C3BE640E1955ED330045CBAD /* XCTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,7 +72,6 @@
 			isa = PBXGroup;
 			children = (
 				C3BE63F41955ED330045CBAD /* MacUDPServer */,
-				C3BE64121955ED330045CBAD /* MacUDPServerTests */,
 				C3BE63ED1955ED330045CBAD /* Frameworks */,
 				C3BE63EC1955ED330045CBAD /* Products */,
 			);
@@ -99,7 +90,6 @@
 			isa = PBXGroup;
 			children = (
 				C3BE63EE1955ED330045CBAD /* Cocoa.framework */,
-				C3BE640D1955ED330045CBAD /* XCTest.framework */,
 				C3BE63F01955ED330045CBAD /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -137,24 +127,6 @@
 				C3BE63FA1955ED330045CBAD /* main.m */,
 				C3BE63FC1955ED330045CBAD /* MacUDPServer-Prefix.pch */,
 				C3BE63FD1955ED330045CBAD /* Credits.rtf */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		C3BE64121955ED330045CBAD /* MacUDPServerTests */ = {
-			isa = PBXGroup;
-			children = (
-				C3BE64181955ED330045CBAD /* MacUDPServerTests.m */,
-				C3BE64131955ED330045CBAD /* Supporting Files */,
-			);
-			path = MacUDPServerTests;
-			sourceTree = "<group>";
-		};
-		C3BE64131955ED330045CBAD /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				C3BE64141955ED330045CBAD /* MacUDPServerTests-Info.plist */,
-				C3BE64151955ED330045CBAD /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -247,7 +219,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3BE64171955ED330045CBAD /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,7 +239,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3BE64191955ED330045CBAD /* MacUDPServerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,14 +275,6 @@
 				C3BE64041955ED330045CBAD /* Base */,
 			);
 			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		C3BE64151955ED330045CBAD /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C3BE64161955ED330045CBAD /* en */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
