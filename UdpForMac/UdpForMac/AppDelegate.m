@@ -11,11 +11,14 @@
 #import "HTHandler.h"
 
 
+#define BindPort 31243
+
 @interface AppDelegate ()<GCDAsyncUdpSocketDelegate>
 
 @property (nonatomic, strong) NSStatusItem *statusItem;
 
 @property (nonatomic, strong) NSMenuItem *ipMenuItem;
+@property (nonatomic, strong) NSMenuItem *titleMenuItem;
 
 @property (nonatomic, strong)GCDAsyncUdpSocket  *udpSocket;
 
@@ -28,11 +31,6 @@
 @end
 
 @implementation AppDelegate
-
-//{
-//    UDPSocket *udp;
-//}
-
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // sudo lsof -i -n -P | grep UDP
@@ -145,16 +143,16 @@
     // 点击后的status栏的图片，一般用白色的
     _statusItem.button.alternateImage = [NSImage imageNamed:@"status_bar_white"];
     
-    
     NSMenu *menu = [[NSMenu alloc] init];
     
-    //    NSString *ip = [self getIPAddress];
-    //
-    //    [menu addItemWithTitle:[self getIPAddress] action:@selector(openFeedbin:) keyEquivalent:@""];
+    [menu addItemWithTitle:@"Mac遥控器" action:nil keyEquivalent:@""];
+    NSString *title = [NSString stringWithFormat:@"%@:%d",[HTHandler getIPAddress],BindPort];
+    [menu addItemWithTitle:title action:nil keyEquivalent:@""];
     
-    self.ipMenuItem.title = [HTHandler getIPAddress];
+//    [menu addItemWithTitle:@"Refresh" action:@selector(openFeedbin:) keyEquivalent:@""];
+//    [menu addItemWithTitle:@"Refresh" action:@selector(openFeedbin:) keyEquivalent:@""];
+    
     [menu addItem:self.ipMenuItem];
-    [menu addItemWithTitle:@"Refresh" action:@selector(openFeedbin:) keyEquivalent:@""];
     
     // 灰色分割线
     [menu addItem:[NSMenuItem separatorItem]];
@@ -190,11 +188,34 @@
 
 - (NSMenuItem *)ipMenuItem{
     if (!_ipMenuItem) {
-        _ipMenuItem = [[NSMenuItem alloc]initWithTitle:@"" action:nil keyEquivalent:@"A"];
+        NSString *title = [NSString stringWithFormat:@"%@:%d",[HTHandler getIPAddress],BindPort];
+        
+        NSMutableAttributedString * mAttribute = [[NSMutableAttributedString alloc] initWithString:title];
+        [mAttribute addAttribute:NSForegroundColorAttributeName
+                           value:[NSColor redColor]
+                           range:NSMakeRange(0, 5)];
+        _ipMenuItem = [[NSMenuItem alloc]initWithTitle:@"Mac遥控器" action:nil keyEquivalent:@""];
         _ipMenuItem.enabled = YES;
         _ipMenuItem.alternate = YES;
+        _ipMenuItem.attributedTitle = mAttribute;
     }
     return _ipMenuItem;
+}
+
+- (NSMenuItem *)titleMenuItem{
+    if (!_titleMenuItem) {
+        NSString *title = [NSString stringWithFormat:@"Mac遥控器"];
+        
+        NSMutableAttributedString * mAttribute = [[NSMutableAttributedString alloc] initWithString:title];
+        [mAttribute addAttribute:NSForegroundColorAttributeName
+                           value:[NSColor redColor]
+                           range:NSMakeRange(0, 2)];
+        _titleMenuItem = [[NSMenuItem alloc]initWithTitle:@"" action:nil keyEquivalent:@""];
+        _titleMenuItem.enabled = YES;
+        _titleMenuItem.alternate = YES;
+        _titleMenuItem.attributedTitle = mAttribute;
+    }
+    return _titleMenuItem;
 }
 
 #pragma mark Getter&Setter
