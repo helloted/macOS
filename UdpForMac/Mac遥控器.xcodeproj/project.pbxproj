@@ -20,7 +20,7 @@
 		5D8655FD23718D91007D70ED /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
 		5D8655FF23718F47007D70ED /* HTHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTHandler.m; sourceTree = "<group>"; };
 		5D86560023718F47007D70ED /* HTHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTHandler.h; sourceTree = "<group>"; };
-		631475851D865E4900159096 /* UdpForMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UdpForMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		631475851D865E4900159096 /* Mac遥控器.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mac遥控器.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		631475881D865E4900159096 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		631475891D865E4900159096 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		6314758C1D865E4900159096 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -51,7 +51,7 @@
 		631475861D865E4900159096 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				631475851D865E4900159096 /* UdpForMac.app */,
+				631475851D865E4900159096 /* Mac遥控器.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -84,9 +84,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		631475841D865E4900159096 /* UdpForMac */ = {
+		631475841D865E4900159096 /* Mac遥控器 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 631475991D865E4900159096 /* Build configuration list for PBXNativeTarget "UdpForMac" */;
+			buildConfigurationList = 631475991D865E4900159096 /* Build configuration list for PBXNativeTarget "Mac遥控器" */;
 			buildPhases = (
 				631475811D865E4900159096 /* Sources */,
 				631475821D865E4900159096 /* Frameworks */,
@@ -96,9 +96,9 @@
 			);
 			dependencies = (
 			);
-			name = UdpForMac;
+			name = "Mac遥控器";
 			productName = UdpForMac;
-			productReference = 631475851D865E4900159096 /* UdpForMac.app */;
+			productReference = 631475851D865E4900159096 /* Mac遥控器.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -116,7 +116,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 631475801D865E4900159096 /* Build configuration list for PBXProject "UdpForMac" */;
+			buildConfigurationList = 631475801D865E4900159096 /* Build configuration list for PBXProject "Mac遥控器" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -130,7 +130,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				631475841D865E4900159096 /* UdpForMac */,
+				631475841D865E4900159096 /* Mac遥控器 */,
 			);
 		};
 /* End PBXProject section */
@@ -285,7 +285,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		631475801D865E4900159096 /* Build configuration list for PBXProject "UdpForMac" */ = {
+		631475801D865E4900159096 /* Build configuration list for PBXProject "Mac遥控器" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				631475971D865E4900159096 /* Debug */,
@@ -294,7 +294,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		631475991D865E4900159096 /* Build configuration list for PBXNativeTarget "UdpForMac" */ = {
+		631475991D865E4900159096 /* Build configuration list for PBXNativeTarget "Mac遥控器" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				6314759A1D865E4900159096 /* Debug */,
