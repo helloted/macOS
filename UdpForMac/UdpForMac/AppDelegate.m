@@ -50,7 +50,7 @@
     
     //banding一个端口(可选),如果不绑定端口,那么就会随机产生一个随机的电脑唯一的端口
     NSError * error = nil;
-    [self.udpSocket bindToPort:31243 interface:nil error:&error];
+    [self.udpSocket bindToPort:BindPort interface:nil error:&error];
     
     //启用广播
     [self.udpSocket enableBroadcast:YES error:&error];
