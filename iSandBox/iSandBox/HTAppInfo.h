@@ -11,6 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface HTAppInfo : NSObject
 
 /** 应用标识boudleId */
@@ -29,6 +30,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, readonly) NSString *deviceName;
 /** 修改时间 */
 @property (nonatomic, readonly) long long sortDateTime;
+
+@property (nonatomic, strong)NSString  *osVersion;
 
 /** 异步获取应用大小 */
 - (void)getAppSize:(void (^)(long long appSize))complete;

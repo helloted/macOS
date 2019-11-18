@@ -32,7 +32,11 @@ NS_ASSUME_NONNULL_BEGIN
 /** 设备标识 */
 @property (nonatomic, copy, readonly) NSString *UDID;
 
+@property (nonatomic, strong) NSString  *osVersion;
+
 - (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary osVersion:(NSString *)osVersion;
 
 @end
 

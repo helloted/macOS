@@ -7,27 +7,29 @@
 //
 
 #import <Cocoa/Cocoa.h>
-@class S_AppInfo, ApplicationMenuItem;
+@class HTAppInfo, ApplicationMenuItem;
 
 @protocol ApplicationMenuItemDelegate <NSObject>
 
 /** 子菜单点击事件回调 */
 @optional
 
-- (void)applicationMenuItem:(ApplicationMenuItem *)appMenuItem revealSandboxInFileViewer:(S_AppInfo *)app;
-- (void)applicationMenuItem:(ApplicationMenuItem *)appMenuItem launchInSimulator:(S_AppInfo *)app;
-- (void)applicationMenuItem:(ApplicationMenuItem *)appMenuItem copySandboxPathToPasteboard:(S_AppInfo *)app;
-- (void)applicationMenuItem:(ApplicationMenuItem *)appMenuItem resetData:(S_AppInfo *)app;
-- (void)applicationMenuItem:(ApplicationMenuItem *)appMenuItem uninstall:(S_AppInfo *)app;
+- (void)applicationMenuItem:(ApplicationMenuItem *)appMenuItem revealSandboxInFileViewer:(HTAppInfo *)app;
+- (void)applicationMenuItem:(ApplicationMenuItem *)appMenuItem launchInSimulator:(HTAppInfo *)app;
+- (void)applicationMenuItem:(ApplicationMenuItem *)appMenuItem copySandboxPathToPasteboard:(HTAppInfo *)app;
+- (void)applicationMenuItem:(ApplicationMenuItem *)appMenuItem resetData:(HTAppInfo *)app;
+- (void)applicationMenuItem:(ApplicationMenuItem *)appMenuItem uninstall:(HTAppInfo *)app;
 
 @end
 
 @interface ApplicationMenuItem : NSMenuItem
 
-- (instancetype)initWithApp:(S_AppInfo *)app;
-- (instancetype)initWithApp:(S_AppInfo *)app withDetailText:(NSString *)detailText;
+- (instancetype)initWithApp:(HTAppInfo *)app;
+- (instancetype)initWithApp:(HTAppInfo *)app withDetailText:(NSString *)detailText;
 
 
 @property (nonatomic, weak) id<ApplicationMenuItemDelegate> delegate;
+
+@property (nonatomic, strong) HTAppInfo *app;
 
 @end

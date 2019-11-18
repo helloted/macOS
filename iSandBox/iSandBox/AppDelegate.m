@@ -10,13 +10,14 @@
 #import "Shell.h"
 #import "HTDevice.h"
 #import "ApplicationMenuItem.h"
+#import "URLContent.h"
 
 NSString *const mainMenuTitle = @"Main Menu";
-NSInteger const recent_max = 5;
+NSInteger const recent_max = 10;
 
 NSInteger const about_Tag = 990;
 
-@interface AppDelegate ()
+@interface AppDelegate () <NSMenuDelegate, ApplicationMenuItemDelegate>
 
 @property (nonatomic, strong) NSStatusItem *statusItem;
 
@@ -65,9 +66,7 @@ NSInteger const about_Tag = 990;
         [menu addItem:[NSMenuItem separatorItem]];
         
         /** 第四标题 */
-        NSMenuItem *quitItem  = [[NSMenuItem alloc] initWithTitle:@"Quit iSimulator" action:@selector(appQuit:) keyEquivalent:@"q"];
-        quitItem.target = self;
-        [menu addItem:quitItem];
+        [menu addItemWithTitle:@"退出" action:@selector(terminate:) keyEquivalent:@"q"];
         
         self.statusItem.menu = menu;
         menu.delegate = self;
@@ -90,8 +89,8 @@ NSInteger const about_Tag = 990;
 //            return;
 //        }
         /** 数据源容器 */
-        NSMutableArray *container = [NSMutableArray arrayWithCapacity:10];
-        NSMutableArray *recentList = [NSMutableArray arrayWithCapacity:8];
+        NSMutableArray *container = [NSMutableArray array];
+        NSMutableArray *recentList = [NSMutableArray array];
         /** 获取设备 */
         NSDictionary *devices = json[@"devices"];
         /** 设备版本 */
@@ -103,7 +102,7 @@ NSInteger const about_Tag = 990;
                 NSArray *simulators = devices[version];
                 for (NSDictionary *sim in simulators) {
                     NSLog(@"sim=%@",sim);
-                    HTDevice *d = [[HTDevice alloc] initWithDictionary:sim];
+                    HTDevice *d = [[HTDevice alloc] initWithDictionary:sim osVersion:version];
                     [dataList addObject:d];
                     if (!d.isUnavailable) {
                         /** 可用模拟器才添加到最近列表 */
@@ -144,7 +143,7 @@ NSInteger const about_Tag = 990;
         
         if (recentList.count) {
             /** 第一标题 */
-            NSMenuItem *recentApps = [self createTipsItemWithTitle:@"Recent Apps"];
+            NSMenuItem *recentApps = [self createTipsItemWithTitle:@"最近使用"];
             [menu insertItem:recentApps atIndex:nextIndex++];
             /** 数据 */
             for (NSInteger i=0; i<recentList.count; i++) {
@@ -152,12 +151,12 @@ NSInteger const about_Tag = 990;
                     break;
                 }
                 HTAppInfo *app = recentList[i];
-                NSMenuItem *appItem = [self createTipsItemWithTitle:app.bundleDisplayName];
-//                ApplicationMenuItem *appItem = [[ApplicationMenuItem alloc] initWithApp:app withDetailText:app.deviceName];
-//                appItem.action = @selector(appOnClickInMenu:);
-//                appItem.target = self;
-//                appItem.representedObject = app;
-//                appItem.delegate = self;
+                
+                ApplicationMenuItem *appItem = [[ApplicationMenuItem alloc] initWithApp:app withDetailText:app.deviceName];
+                appItem.action = @selector(openAppDocument:);
+                appItem.target = self;
+                appItem.representedObject = app;
+                appItem.delegate = self;
                 [menu insertItem:appItem atIndex:nextIndex++];
             }
             
@@ -183,6 +182,38 @@ NSInteger const about_Tag = 990;
 //        });
     }];
 }
+
+- (void)openAppDocument:(ApplicationMenuItem *)menu
+{
+    HTAppInfo *appInfo = menu.app;
+    NSURL *appUrl = [self getAppDocumentUrl:appInfo];
+    if (appUrl) {
+        [[NSWorkspace sharedWorkspace] openURL:appUrl];
+    }
+}
+
+- (NSURL *)getAppDocumentUrl:(HTAppInfo *)appInfo
+{
+    if (appInfo == nil) return nil;
+    NSURL *url = applicationPathURL(appInfo.UDID);
+    NSArray *dirEnumerator = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:url includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsSubdirectoryDescendants error:nil];
+    
+    NSURL *appUrl = nil;
+    for (NSURL *dirUrl in dirEnumerator) {
+        NSDictionary *mobileContainerManager = [NSDictionary dictionaryWithContentsOfURL:mobileContainerManagerPlistURL(dirUrl)];
+        if ([mobileContainerManager[mobileContainerManagerPlist_Identifier] isEqualToString:appInfo.bundleId]) {
+            appUrl = dirUrl;
+            break;
+        }
+    }
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:appUrl.path])
+    {
+        return appUrl;
+    }
+    return nil;
+}
+
 
 - (NSMenuItem *)createTipsItemWithTitle:(NSString *)title
 {

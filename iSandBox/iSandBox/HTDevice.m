@@ -60,6 +60,15 @@
     return self;
 }
 
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary osVersion:(nonnull NSString *)osVersion{
+    self = [super init];
+    if (self) {
+        _osVersion = osVersion;
+        self = [self initWithDictionary:dictionary];
+    }
+    return self;
+}
+
 - (NSImage *)deviceIcon
 {
     NSString *imageName = @"";

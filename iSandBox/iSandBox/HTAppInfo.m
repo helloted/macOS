@@ -56,11 +56,14 @@
         NSString *bundleVersion = infoDict[@"CFBundleVersion"];
         NSString *icon = ((NSArray *)infoDict[@"CFBundleIcons"][@"CFBundlePrimaryIcon"][@"CFBundleIconFiles"]).firstObject;
         
+        NSString *osVer = infoDict[@"DTPlatformVersion"];
+        
         _bundleId = bundleId;
         _bundleDisplayName = bundleDisplayName;
         _bundleShortVersion = bundleShortVersion;
         _bundleVersion = bundleVersion;
         _icon = icon;
+        _osVersion = osVer;
         
     }
     
