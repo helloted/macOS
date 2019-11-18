@@ -12,8 +12,11 @@
 		5D8655B7236FD3F3007D70ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5D8655B6236FD3F3007D70ED /* Assets.xcassets */; };
 		5D8655BA236FD3F3007D70ED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5D8655B8236FD3F3007D70ED /* Main.storyboard */; };
 		5D8655BD236FD3F3007D70ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8655BC236FD3F3007D70ED /* main.m */; };
+		5DC889D8237E8AAF009810C0 /* Shell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC889D7237E8AAF009810C0 /* Shell.m */; };
+		5DC889DB237E9208009810C0 /* HTDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC889DA237E9208009810C0 /* HTDevice.m */; };
+		5DC889DE237E9275009810C0 /* HTAppInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC889DD237E9275009810C0 /* HTAppInfo.m */; };
+		5DC889E1237E9395009810C0 /* URLContent.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DC889DF237E9395009810C0 /* URLContent.m */; };
 		887579742370704B003AC030 /* HTHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 887579732370704B003AC030 /* HTHandler.m */; };
-		889FF9CE237088B500876C1A /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 889FF9CD237088B500876C1A /* GCDAsyncUdpSocket.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,10 +30,16 @@
 		5D8655BB236FD3F3007D70ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5D8655BC236FD3F3007D70ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5D8655BE236FD3F3007D70ED /* iSandBox.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iSandBox.entitlements; sourceTree = "<group>"; };
+		5DC889D6237E8AAF009810C0 /* Shell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shell.h; sourceTree = "<group>"; };
+		5DC889D7237E8AAF009810C0 /* Shell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Shell.m; sourceTree = "<group>"; };
+		5DC889D9237E9208009810C0 /* HTDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTDevice.h; sourceTree = "<group>"; };
+		5DC889DA237E9208009810C0 /* HTDevice.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTDevice.m; sourceTree = "<group>"; };
+		5DC889DC237E9275009810C0 /* HTAppInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTAppInfo.h; sourceTree = "<group>"; };
+		5DC889DD237E9275009810C0 /* HTAppInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTAppInfo.m; sourceTree = "<group>"; };
+		5DC889DF237E9395009810C0 /* URLContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLContent.m; sourceTree = "<group>"; };
+		5DC889E0237E9395009810C0 /* URLContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLContent.h; sourceTree = "<group>"; };
 		887579722370704B003AC030 /* HTHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTHandler.h; sourceTree = "<group>"; };
 		887579732370704B003AC030 /* HTHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTHandler.m; sourceTree = "<group>"; };
-		889FF9CC237088B500876C1A /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
-		889FF9CD237088B500876C1A /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,8 +72,10 @@
 		5D8655AF236FD3F2007D70ED /* iSandBox */ = {
 			isa = PBXGroup;
 			children = (
-				889FF9CC237088B500876C1A /* GCDAsyncUdpSocket.h */,
-				889FF9CD237088B500876C1A /* GCDAsyncUdpSocket.m */,
+				5DC889E0237E9395009810C0 /* URLContent.h */,
+				5DC889DF237E9395009810C0 /* URLContent.m */,
+				5DC889D6237E8AAF009810C0 /* Shell.h */,
+				5DC889D7237E8AAF009810C0 /* Shell.m */,
 				5D8655B0236FD3F2007D70ED /* AppDelegate.h */,
 				5D8655B1236FD3F2007D70ED /* AppDelegate.m */,
 				5D8655B3236FD3F2007D70ED /* ViewController.h */,
@@ -76,6 +87,10 @@
 				5D8655BE236FD3F3007D70ED /* iSandBox.entitlements */,
 				887579722370704B003AC030 /* HTHandler.h */,
 				887579732370704B003AC030 /* HTHandler.m */,
+				5DC889D9237E9208009810C0 /* HTDevice.h */,
+				5DC889DA237E9208009810C0 /* HTDevice.m */,
+				5DC889DC237E9275009810C0 /* HTAppInfo.h */,
+				5DC889DD237E9275009810C0 /* HTAppInfo.m */,
 			);
 			path = iSandBox;
 			sourceTree = "<group>";
@@ -150,8 +165,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				887579742370704B003AC030 /* HTHandler.m in Sources */,
-				889FF9CE237088B500876C1A /* GCDAsyncUdpSocket.m in Sources */,
 				5D8655B5236FD3F2007D70ED /* ViewController.m in Sources */,
+				5DC889D8237E8AAF009810C0 /* Shell.m in Sources */,
+				5DC889DB237E9208009810C0 /* HTDevice.m in Sources */,
+				5DC889DE237E9275009810C0 /* HTAppInfo.m in Sources */,
+				5DC889E1237E9395009810C0 /* URLContent.m in Sources */,
 				5D8655BD236FD3F3007D70ED /* main.m in Sources */,
 				5D8655B2236FD3F2007D70ED /* AppDelegate.m in Sources */,
 			);

@@ -7,18 +7,22 @@
 //
 
 #import "AppDelegate.h"
-#import "GCDAsyncUdpSocket.h"
-#include <ifaddrs.h>
-#include <arpa/inet.h>
+#import "Shell.h"
+#import "HTDevice.h"
+#import "ApplicationMenuItem.h"
 
-@interface AppDelegate () <GCDAsyncUdpSocketDelegate>
+NSString *const mainMenuTitle = @"Main Menu";
+NSInteger const recent_max = 5;
+
+NSInteger const about_Tag = 990;
+
+@interface AppDelegate ()
 
 @property (nonatomic, strong) NSStatusItem *statusItem;
 
 @property (nonatomic, strong)NSMenuItem *ipMenuItem;
 
-@property (strong, nonatomic)GCDAsyncUdpSocket * udpSocket;
-@property (nonatomic, strong)NSMutableDictionary   *sendDatas;
+@property (nonatomic, strong) NSMenu *menu_main;
 
 @end
 
@@ -26,12 +30,205 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     [self customStatusItem];
-    [self createClientUdpSocket];
+    [self buildUI];
+    [self loadData:nil];
 }
 
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
+}
+
+- (void)buildUI
+{
+    if (self.menu_main == nil) {
+        NSMenu *menu = [[NSMenu alloc] initWithTitle:mainMenuTitle];
+        
+        /** 菊花加载 */
+//        NSMenuItem * recentLoaded = [MainMenu createTipsItemWithTitle:@""];
+//        iActivityIndicatorView *indicator = [[iActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, menu.size.width, 20)];
+//        recentLoaded.view = indicator;
+//        [menu addItem:recentLoaded];
+        
+        [menu addItem:[NSMenuItem separatorItem]];
+        
+        /** 第三标题 */
+        NSMenuItem *aboutItem  = [[NSMenuItem alloc] initWithTitle:@"About iSimulator" action:@selector(appAbout:) keyEquivalent:@""];
+        aboutItem.tag = about_Tag;
+        aboutItem.target = self;
+        [menu addItem:aboutItem];
+        
+        NSMenuItem *prefeItem  = [[NSMenuItem alloc] initWithTitle:@"Preferences..." action:@selector(appPreferences:) keyEquivalent:@","];
+        prefeItem.target = self;
+        [menu addItem:prefeItem];
+        
+        [menu addItem:[NSMenuItem separatorItem]];
+        
+        /** 第四标题 */
+        NSMenuItem *quitItem  = [[NSMenuItem alloc] initWithTitle:@"Quit iSimulator" action:@selector(appQuit:) keyEquivalent:@"q"];
+        quitItem.target = self;
+        [menu addItem:quitItem];
+        
+        self.statusItem.menu = menu;
+        menu.delegate = self;
+        self.menu_main = menu;
+        
+        _statusItem.menu = self.menu_main;
+    }
+}
+
+- (void)loadData:(void (^)(void))complete
+{
+    
+    
+    [self loadDevicesJson_async:^(NSDictionary *json) {
+//        if ([json isKindOfClass:[NSDictionary class]] == NO) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                self.resultBlock(@[], @[]);
+//                if (complete) complete();
+//            });
+//            return;
+//        }
+        /** 数据源容器 */
+        NSMutableArray *container = [NSMutableArray arrayWithCapacity:10];
+        NSMutableArray *recentList = [NSMutableArray arrayWithCapacity:8];
+        /** 获取设备 */
+        NSDictionary *devices = json[@"devices"];
+        /** 设备版本 */
+        for (NSString *version in devices) {
+            /** 筛选iOS模拟器 */
+            if ([version containsString:@"iOS"]) {
+                /** 筛选可利用的模拟器 */
+                NSMutableArray *dataList = [NSMutableArray array];
+                NSArray *simulators = devices[version];
+                for (NSDictionary *sim in simulators) {
+                    NSLog(@"sim=%@",sim);
+                    HTDevice *d = [[HTDevice alloc] initWithDictionary:sim];
+                    [dataList addObject:d];
+                    if (!d.isUnavailable) {
+                        /** 可用模拟器才添加到最近列表 */
+                        [recentList addObjectsFromArray:d.appList];
+                    }
+                }
+                if (dataList.count) {
+                    /** 过滤历史模拟器 */
+                    NSString *key = version;
+                    NSString *oldVersion = @"com.apple.CoreSimulator.SimRuntime.";
+                    if ([key containsString:oldVersion]) {
+                        key = [[key stringByReplacingOccurrencesOfString:oldVersion withString:@""] stringByReplacingOccurrencesOfString:@"-" withString:@"."];
+                        key = [key stringByReplacingCharactersInRange:[key rangeOfString:@"."] withString:@" "];
+                    }
+                    [container addObject:@{key:dataList}];
+                }
+            }
+        }
+        /** 筛选最近使用应用 */
+        [recentList sortUsingComparator:^NSComparisonResult(HTAppInfo *  _Nonnull obj1, HTAppInfo *  _Nonnull obj2) {
+            return obj1.sortDateTime < obj2.sortDateTime;
+        }];
+        
+        
+        NSMenu *menu = self.menu_main;
+        
+        /** 删除旧数据 直到about_Tag */
+        for (NSMenuItem *item in menu.itemArray) {
+            if (item.tag == about_Tag) {
+                break;
+            }
+            if (item.menu) {
+                [menu removeItem:item];
+            }
+        }
+        
+        NSInteger nextIndex = 0;
+        
+        if (recentList.count) {
+            /** 第一标题 */
+            NSMenuItem *recentApps = [self createTipsItemWithTitle:@"Recent Apps"];
+            [menu insertItem:recentApps atIndex:nextIndex++];
+            /** 数据 */
+            for (NSInteger i=0; i<recentList.count; i++) {
+                if (i == recent_max) {
+                    break;
+                }
+                HTAppInfo *app = recentList[i];
+                NSMenuItem *appItem = [self createTipsItemWithTitle:app.bundleDisplayName];
+//                ApplicationMenuItem *appItem = [[ApplicationMenuItem alloc] initWithApp:app withDetailText:app.deviceName];
+//                appItem.action = @selector(appOnClickInMenu:);
+//                appItem.target = self;
+//                appItem.representedObject = app;
+//                appItem.delegate = self;
+                [menu insertItem:appItem atIndex:nextIndex++];
+            }
+            
+            [menu insertItem:[NSMenuItem separatorItem] atIndex:nextIndex++];
+            /** 数据 */
+            [menu insertItem:[NSMenuItem separatorItem] atIndex:nextIndex++];
+            
+        } else {
+            /** 第一标题 */
+            NSMenuItem *recentApps = [self createTipsItemWithTitle:@"NO Simulators"];
+            [menu insertItem:recentApps atIndex:nextIndex++];
+            [menu insertItem:[NSMenuItem separatorItem] atIndex:nextIndex++];
+        }
+        
+        [menu update];
+        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            self.container = [container copy];
+//            self.resultBlock(self.container, [appList copy]);
+//            /** 开启监视 */
+//            [self startMointor];
+//            if (complete) complete();
+//        });
+    }];
+}
+
+- (NSMenuItem *)createTipsItemWithTitle:(NSString *)title
+{
+    NSMenuItem * tips = [[NSMenuItem alloc] initWithTitle:title action:Nil keyEquivalent:@""];
+    tips.enabled = NO;
+    return tips;
+}
+
+
+- (void)loadDevicesJson_async:(void (^)(NSDictionary *json))complete
+{
+    dispatch_async(dispatch_queue_create("SimulatorManagerQueue", DISPATCH_QUEUE_SERIAL), ^{
+        NSString *jsonString = shell(@"/usr/bin/xcrun", @[@"simctl", @"list", @"-j", @"devices"]);
+        NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        if ([json isKindOfClass:[NSDictionary class]] == NO) {
+            if (complete) complete(nil);
+        } else {
+            if (complete) complete(json);
+        }
+    });
+}
+
+- (NSString *)runCommand:(NSString *)commandToRun
+{
+    NSTask *task = [[NSTask alloc] init];
+    [task setLaunchPath:@"/bin/sh"];
+
+    NSArray *arguments = [NSArray arrayWithObjects:
+                          @"-c" ,
+                          [NSString stringWithFormat:@"%@", commandToRun],
+                          nil];
+    NSLog(@"run command:%@", commandToRun);
+    [task setArguments:arguments];
+
+    NSPipe *pipe = [NSPipe pipe];
+    [task setStandardOutput:pipe];
+
+    NSFileHandle *file = [pipe fileHandleForReading];
+
+    [task launch];
+
+    NSData *data = [file readDataToEndOfFile];
+
+    NSString *output = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return output;
 }
 
 
@@ -46,202 +243,26 @@
     _statusItem.button.alternateImage = [NSImage imageNamed:@"status_bar_white"];
     
     
-    NSMenu *menu = [[NSMenu alloc] init];
-    
-//    NSString *ip = [self getIPAddress];
+//    NSMenu *menu = [[NSMenu alloc] init];
 //
-    [menu addItemWithTitle:[self getIPAddress] action:@selector(openFeedbin:) keyEquivalent:@""];
-    
-//    [menu addItem:self.ipMenuItem];
-    [menu addItemWithTitle:@"Refresh" action:@selector(openFeedbin:) keyEquivalent:@""];
-
-    // 灰色分割线
-    [menu addItem:[NSMenuItem separatorItem]];
-    
-    // 退出
-    [menu addItemWithTitle:@"退出" action:@selector(terminate:) keyEquivalent:@""];
-    _statusItem.menu = menu;
+////    NSString *ip = [self getIPAddress];
+//
+//
+////    [menu addItem:self.ipMenuItem];
+//    [menu addItemWithTitle:@"Refresh" action:@selector(openFeedbin:) keyEquivalent:@""];
+//
+//    // 灰色分割线
+//    [menu addItem:[NSMenuItem separatorItem]];
+//
+//    // 退出
+//    [menu addItemWithTitle:@"退出" action:@selector(terminate:) keyEquivalent:@"q"];
+//    _statusItem.menu = menu;
 }
 
-//- (void)initUDPSocket{
-//    self.ipMenuItem.title = [self getIPAddress];
-//}
 
 - (void)openFeedbin:(id)sender{
-    NSLog(@"openFeedbin clicked ==%@",[self getIPAddress]);
+    NSLog(@"openFeedbin clicked =");
 }
-
-- (NSString *)getIPAddress {
-
-    NSString *address = @"error";
-    struct ifaddrs *interfaces = NULL;
-    struct ifaddrs *temp_addr = NULL;
-    int success = 0;
-    success = getifaddrs(&interfaces);
-    if (success == 0) {
-        temp_addr = interfaces;
-        while(temp_addr != NULL) {
-            if(temp_addr->ifa_addr->sa_family == AF_INET) {
-                // Check if interface is en0 which is the wifi connection on the iPhone
-                NSLog(@"inter:%@",[NSString stringWithUTF8String:temp_addr->ifa_name]);
-                if([[NSString stringWithUTF8String:temp_addr->ifa_name] containsString:@"en"]) {
-                    // Get NSString from C String
-                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
-
-                }
-
-            }
-
-            temp_addr = temp_addr->ifa_next;
-        }
-    }
-    freeifaddrs(interfaces);
-    return address;
-
-}
-
--(void)createClientUdpSocket{
-    //创建udp socket
-    self.udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)];
-    
-    //banding一个端口(可选),如果不绑定端口,那么就会随机产生一个随机的电脑唯一的端口
-    NSError * error = nil;
-//    [self.udpSocket bindToPort:31245 error:&error];
-    
-    [self.udpSocket bindToPort:31288 error:&error];
-    
-    //启用广播
-    [self.udpSocket enableBroadcast:YES error:&error];
-    
-    if (error) {//监听错误打印错误信息
-        NSLog(@"error:%@",error);
-    }else {//监听成功则开始接收信息
-        NSLog(@"UDP创建成功");
-        [self.udpSocket beginReceiving:&error];
-    }
-    
-    
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        NSError * error = nil;
-//        [self.udpSocket bindToPort:31245 error:&error];
-//        NSLog(@"bbbbbbind==");
-//    });
-}
-
-////广播
-//-(void)broadcast{
-//    NSDictionary *firstDict = @{@"type":@(BroadcastSendType),@"msg":@"Broadcast Searching..."};
-//    NSString *host = @"255.255.255.255";
-//    [self sendUDPWithData:firstDict toHost:host];
-//}
-
-//- (void)sendUDPWithData:(NSDictionary *)data toHost:(NSString *)host{
-//    if (!data) {
-//        NSLog(@"data为空");
-//        return;
-//    }
-//    NSError *error;
-//    int tag = arc4random() % 1000;
-//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:data options:NSJSONWritingPrettyPrinted error:&error];
-//    //发送数据（tag: 消息标记）
-//    [self.udpSocket sendData:jsonData toHost:host port:MacPort withTimeout:-1 tag:tag];
-//
-//    [self.sendDatas setValue:data forKey:@(tag).stringValue];
-//}
-
-#pragma mark GCDAsyncUdpSocketDelegate
-
-
-//发送数据成功
--(void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag{
-    NSDictionary *send = [self.sendDatas valueForKey:@(tag).stringValue];
-    NSLog(@"iphone=>mac:%@",send);
-}
-
-//发送数据失败
--(void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error{
-    NSLog(@"标记为%ld的数据发送失败，失败原因：%@",tag, error);
-}
-
-//接收到数据
--(void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext{
-    
-//    uint16_t port = [GCDAsyncUdpSocket portFromAddress:address];
-//    if (port != MacPort) {
-//        return;
-//    }
-    
-    if (!data) {
-        return;
-    }
-    
-    NSString *str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    NSDictionary *result = [self dictionaryWithJsonString:str];
-    NSLog(@"mac=>iphone:%@",result);
-    
-//    if (result) {
-//        NSInteger type = 0;
-//        NSNumber *typeNum = [result objectForKey:@"type"];
-//        if (typeNum && [typeNum respondsToSelector:@selector(integerValue)]) {
-//            type = typeNum.integerValue;
-//        }
-//
-//        if (type == 2) { // 向外广播搜索时的回消息
-//            self.receivedMacHostName = [result objectForKey:@"hostname"];
-//            self.receivedMacHostIP = [GCDAsyncUdpSocket hostFromAddress:address];
-//            self.lastIP = self.receivedMacHostIP;
-//            [[NSUserDefaults standardUserDefaults] setValue:self.lastIP forKey:kRemoteIPKey];
-//        }
-//
-//    }
-    
-}
-
-- (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString
-{
-    if (jsonString == nil) {
-        return nil;
-    }
-    
-    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-    NSError *err;
-    NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:jsonData
-                                                        options:NSJSONReadingMutableContainers
-                                                          error:&err];
-    if(err)
-    {
-        NSLog(@"json解析失败：%@",err);
-        return nil;
-    }
-    return dic;
-}
-
--(NSString *)strFromJsonDict:(NSDictionary *)dict
-{
-    NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
-    NSString *jsonString;
-    
-    if (!jsonData) {
-        NSLog(@"%@",error);
-    }else{
-        jsonString = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
-        
-    }
-    
-    NSMutableString *mutStr = [NSMutableString stringWithString:jsonString];
-    NSRange range = {0,jsonString.length};
-    
-    //去掉字符串中的空格
-    [mutStr replaceOccurrencesOfString:@" " withString:@"" options:NSLiteralSearch range:range];
-    NSRange range2 = {0,mutStr.length};
-    
-    //去掉字符串中的换行符
-    [mutStr replaceOccurrencesOfString:@"\n" withString:@"" options:NSLiteralSearch range:range2];
-    
-    return mutStr;
-}
-
 
 
 #pragma mark Getter&Setter
@@ -255,12 +276,6 @@
     return _ipMenuItem;
 }
 
-- (NSMutableDictionary *)sendDatas{
-    if (!_sendDatas) {
-        _sendDatas = [NSMutableDictionary dictionary];
-    }
-    return _sendDatas;
-}
 
 
 @end
