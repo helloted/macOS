@@ -13,6 +13,7 @@
 #import "URLContent.h"
 #import "AboutWindowController.h"
 
+
 NSString *const mainMenuTitle = @"Main Menu";
 NSInteger const recent_max = 10;
 
@@ -146,11 +147,11 @@ NSInteger const about_Tag = 990;
     aboutItem.target = self;
     [self.mainMenu addItem:aboutItem];
     
-//    NSMenuItem *prefeItem  = [[NSMenuItem alloc] initWithTitle:@"Preferences..." action:@selector(appPreferences:) keyEquivalent:@"p"];
+//    NSMenuItem *prefeItem  = [[NSMenuItem alloc] initWithTitle:@"设置" action:@selector(appPreferences) keyEquivalent:@"p"];
 //    prefeItem.target = self;
 //    [self.mainMenu addItem:prefeItem];
 //
-    [self.mainMenu addItem:[NSMenuItem separatorItem]];
+//    [self.mainMenu addItem:[NSMenuItem separatorItem]];
     
     /** 第四标题 */
     [self.mainMenu addItemWithTitle:@"退出" action:@selector(terminate:) keyEquivalent:@"q"];
@@ -165,6 +166,16 @@ NSInteger const about_Tag = 990;
     [_aboutWindowController.window orderFrontRegardless];
     
     [_aboutWindowController showWindow:self];
+}
+
+- (void)appPreferences{
+    [NSApp activateIgnoringOtherApps:YES];
+    
+//    SettingWindowController *settingVC = [[SettingWindowController alloc]initWithWindowNibName:@"SettingWindowController"];
+//    [settingVC.window center];
+//    [settingVC.window orderFrontRegardless];
+//
+//    [settingVC showWindow:self];
 }
 
 
