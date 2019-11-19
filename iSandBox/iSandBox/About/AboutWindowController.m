@@ -26,7 +26,7 @@
     self.version = [NSString stringWithFormat:@"%@ (%@)", version, build];
     
     
-    self.desc = @"一键直达沙盒位置";
+    self.desc = @"一键直达Simulator沙盒文件夹位置";
 }
 - (IBAction)linAction:(id)sender {
     [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.helloted.com"]];
