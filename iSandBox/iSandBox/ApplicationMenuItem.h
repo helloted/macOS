@@ -1,9 +1,9 @@
 //
 //  ApplicationMenuItem.h
-//  iSimulator
+//  iSandBox
 //
-//  Created by LamTsanFeng on 2016/11/10.
-//  Copyright © 2016年 GZMiracle. All rights reserved.
+//  Created by iMac on 2019/11/4.
+//  Copyright © 2019 Haozhicao. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
