@@ -145,7 +145,7 @@
     
     NSMenu *menu = [[NSMenu alloc] init];
     
-    [menu addItemWithTitle:@"Mac遥控器" action:nil keyEquivalent:@""];
+    [menu addItemWithTitle:@"遥控器" action:nil keyEquivalent:@""];
     NSString *title = [NSString stringWithFormat:@"%@:%d",[HTHandler getIPAddress],BindPort];
     [menu addItemWithTitle:title action:nil keyEquivalent:@""];
     

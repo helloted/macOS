@@ -23,7 +23,14 @@ NSString *const mobileContainerManagerPlist_Identifier = @"MCMMetadataIdentifier
 NSURL * devicePathURL()
 {
     if (devicePathURL_final == nil) {
-        NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory,NSUserDomainMask,YES) objectAtIndex:0];
+//        NSString *libraryPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory,NSUserDomainMask,YES) objectAtIndex:0];
+        NSString *home = NSHomeDirectory();
+        NSArray *pathArray = [home componentsSeparatedByString:@"/"];
+        NSString *absolutePath;
+        if ([pathArray count] > 2) {
+            absolutePath = [NSString stringWithFormat:@"/%@/%@", [pathArray objectAtIndex:1], [pathArray objectAtIndex:2]];
+        }
+        NSString *libraryPath = [absolutePath stringByAppendingFormat:@"/Library"];
         devicePathURL_final = [NSURL fileURLWithPath:[libraryPath stringByAppendingPathComponent:devicesPath]];
     }
     return devicePathURL_final;

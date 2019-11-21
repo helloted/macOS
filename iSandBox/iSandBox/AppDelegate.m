@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "Shell.h"
 #import "HTDevice.h"
 #import "ApplicationMenuItem.h"
 #import "URLContent.h"
@@ -18,6 +17,8 @@ NSString *const mainMenuTitle = @"Main Menu";
 NSInteger const recent_max = 10;
 
 NSInteger const about_Tag = 990;
+
+#define XcodeAppPath  @"XcodeAppPath"
 
 @interface AppDelegate () <NSMenuDelegate, ApplicationMenuItemDelegate>
 
@@ -35,7 +36,7 @@ NSInteger const about_Tag = 990;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     [self customStatusItem];
-    [self rebuildMenu];
+    [self reloadAppMuenuIfPrepared];
 }
 
 
@@ -43,23 +44,109 @@ NSInteger const about_Tag = 990;
     // Insert code here to tear down your application
 }
 
-- (void)menuWillOpen:(NSMenu *)menu{
-    NSLog(@"menu will open");
-    [self rebuildMenu];
+- (void)pickFile{
+    
+    NSOpenPanel* panel = [NSOpenPanel openPanel];
+    
+    NSURL *url = [NSURL URLWithString:@"file:///Applications"];
+    [panel setDirectoryURL:url];
+    [panel setAllowsMultipleSelection:NO];  //是否允许多选file
+    [panel setCanChooseFiles:YES];
+    [panel setCanChooseDirectories:NO];
+    
+    [panel setTitle:@"选择Xcode应用程序"];
+    
+    [panel beginWithCompletionHandler:^(NSInteger result) {
+        if (result == NSModalResponseOK) {
+
+            
+            NSLog(@"panelurl==%@",panel.URL.path);
+            
+            NSURL *appInfoPath = [panel.URL URLByAppendingPathComponent:@"Contents/Info.plist"];
+            NSDictionary *infoDict = [NSDictionary dictionaryWithContentsOfURL:appInfoPath];
+            NSString *bundleId = infoDict[@"CFBundleIdentifier"];
+            if ([bundleId isEqualToString:@"com.apple.dt.Xcode"]) {
+                NSData *bookmarkData =[panel.URL bookmarkDataWithOptions:NSURLBookmarkCreationWithSecurityScope includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
+                [[NSUserDefaults standardUserDefaults] setValue:bookmarkData forKey:XcodeAppPath];
+                
+                [self reloadAppMuenuIfPrepared];
+//                [panel.URL startAccessingSecurityScopedResource];
+//                [self rebuildMenuWithXcodeURL:panel.URL];
+            }
+
+        }
+        
+    }];
 }
 
-- (void)rebuildMenu{
+- (void)reloadAppMuenuIfPrepared{
+    NSURL *xcodeURL = [NSURL URLWithString:@"file:///Applications/Xcode.app"];
+    NSURL *appInfoPath = [xcodeURL URLByAppendingPathComponent:@"/Contents/Info.plist"];
+    NSDictionary *infoDict = [NSDictionary dictionaryWithContentsOfURL:appInfoPath];
+    NSString *bundleId = infoDict[@"CFBundleIdentifier"];
+    if ([bundleId isEqualToString:@"com.apple.dt.Xcode"]) {
+        [self rebuildMenuWithXcodeURL:xcodeURL];
+    }else{
+        [self.mainMenu removeAllItems];
+        [self mainMenuAppendNormalItem];
+        NSMenuItem *prefeItem  = [[NSMenuItem alloc] initWithTitle:@"未找到Xcode" action:@selector(showNOXcodeAlert) keyEquivalent:@""];
+        prefeItem.target = self;
+        [self.mainMenu insertItem:prefeItem atIndex:0];
+        [self.mainMenu update];
+    }
+}
+
+
+- (void)showNOXcodeAlert{
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.alertStyle = NSAlertStyleInformational;
+    [alert addButtonWithTitle:@"确定"];
+    alert.messageText = @"未找到Xcode应用";
+    alert.informativeText = @"未在应用程序(Applications)文件夹下找到Xcode，请安装Xcode或者将Xcode移至应用程序(Applications)文件夹";
+    
+    [alert beginSheetModalForWindow:[NSApplication sharedApplication].keyWindow completionHandler:^(NSModalResponse returnCode) {
+        //        NSLog(@"%d", returnCode);
+        if (returnCode == NSAlertFirstButtonReturn) {
+            NSLog(@"确定");
+        } else if (returnCode == NSAlertSecondButtonReturn) {
+            NSLog(@"取消");
+        } else {
+            NSLog(@"其他按钮");
+        }
+    }];
+    [alert runModal];
+}
+
+
+- (void)menuWillOpen:(NSMenu *)menu{
+    NSLog(@"menu will open");
+    [self reloadAppMuenuIfPrepared];
+}
+
+- (void)rebuildMenuWithXcodeURL:(NSURL *)xcodeURL{
     dispatch_async(dispatch_queue_create("SimulatorManagerQueue", DISPATCH_QUEUE_SERIAL), ^{
-        NSString *jsonString = shell(@"/usr/bin/xcrun", @[@"simctl", @"list", @"-j", @"devices"]);
-        NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
-        if ([json isKindOfClass:[NSDictionary class]] == NO) {
+        NSTask *task = [NSTask new];
+        NSString *path = [NSString stringWithFormat:@"%@/Contents/Developer/usr/bin/simctl",xcodeURL.path];
+        
+        [task setLaunchPath:path];
+        [task setArguments: @[@"list", @"-j", @"devices"]];
+        
+        NSPipe *output = [NSPipe new];
+        task.standardOutput = output;
+
+        [task launch];
+        [task waitUntilExit];
+
+
+        NSData *data = output.fileHandleForReading.readDataToEndOfFile;
+        NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        if ([resultJson isKindOfClass:[NSDictionary class]] == NO) {
             return;
         }
     
         NSMutableArray *recentList = [NSMutableArray array];
         /** 获取设备 */
-        NSDictionary *devices = json[@"devices"];
+        NSDictionary *devices = resultJson[@"devices"];
         /** 设备版本 */
         for (NSString *version in devices) {
             /** 筛选iOS模拟器 */
@@ -147,15 +234,18 @@ NSInteger const about_Tag = 990;
     aboutItem.target = self;
     [self.mainMenu addItem:aboutItem];
     
-//    NSMenuItem *prefeItem  = [[NSMenuItem alloc] initWithTitle:@"设置" action:@selector(appPreferences) keyEquivalent:@"p"];
+//    NSMenuItem *prefeItem  = [[NSMenuItem alloc] initWithTitle:@"选择Xcode路径" action:@selector(pickFile) keyEquivalent:@"p"];
 //    prefeItem.target = self;
 //    [self.mainMenu addItem:prefeItem];
-//
-//    [self.mainMenu addItem:[NSMenuItem separatorItem]];
+
+    [self.mainMenu addItem:[NSMenuItem separatorItem]];
     
     /** 第四标题 */
     [self.mainMenu addItemWithTitle:@"退出" action:@selector(terminate:) keyEquivalent:@"q"];
 }
+
+
+
 
 - (void)appAbout{
     [NSApp activateIgnoringOtherApps:YES];
