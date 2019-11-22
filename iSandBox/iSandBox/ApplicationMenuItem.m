@@ -8,8 +8,7 @@
 
 #import "ApplicationMenuItem.h"
 #import "HTAppInfo.h"
-#import "NSImage+Addition.h"
-#import "NSNumber+Addition.h"
+
 //#import "SimulatorManager.h"
 
 @interface ApplicationMenuItem () <NSMenuDelegate>
@@ -52,7 +51,26 @@
     }
     self.attributedTitle = title;
     
-    self.image = [self.app.appIcon imageWithCornerRadius:6 size:NSMakeSize(30, 30)] ?: [NSImage imageNamed:@"DefaultAppIcon"];
+    self.image = [self imageWithCornerRadius:self.app.appIcon :6 size:NSMakeSize(30, 30)] ?: [NSImage imageNamed:@"DefaultAppIcon"];
+}
+
+
+- (NSImage *)imageWithCornerRadius:(NSImage *)image :(CGFloat)cornerRadius size:(NSSize)size
+{
+    if (image.isValid == NO) return nil;
+    NSImage *newImage = [[NSImage alloc] initWithSize:size];
+    [newImage lockFocus];
+    image.size = size;
+    [NSGraphicsContext currentContext].imageInterpolation = NSImageInterpolationHigh;
+    [NSGraphicsContext saveGraphicsState];
+    NSBezierPath *bezierPath = [NSBezierPath bezierPathWithRoundedRect:(NSRect){NSZeroPoint, size} xRadius:cornerRadius yRadius:cornerRadius];
+    [bezierPath addClip];
+    [image drawAtPoint:NSZeroPoint fromRect:(NSRect){NSZeroPoint, size} operation:NSCompositingOperationCopy fraction:1.f];
+    [NSGraphicsContext restoreGraphicsState];
+    
+    [newImage unlockFocus];
+    
+    return newImage;
 }
 
 @end

@@ -8,11 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5D2329E923828F4C008A3871 /* ApplicationMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2329E823828F4C008A3871 /* ApplicationMenuItem.m */; };
-		5D2329F723829016008A3871 /* NSUserDefaults+KeyPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2329EE23829016008A3871 /* NSUserDefaults+KeyPath.m */; };
-		5D2329F823829016008A3871 /* NSImage+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2329F123829016008A3871 /* NSImage+Addition.m */; };
-		5D2329F923829016008A3871 /* NSDate+common.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2329F223829016008A3871 /* NSDate+common.m */; };
-		5D2329FA23829016008A3871 /* NSNumber+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2329F423829016008A3871 /* NSNumber+Addition.m */; };
-		5D2329FB23829016008A3871 /* NSAlert+Block.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2329F523829016008A3871 /* NSAlert+Block.m */; };
 		5D232A122383EEDF008A3871 /* AboutWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5D232A0A2383EEDF008A3871 /* AboutWindowController.xib */; };
 		5D232A132383EEDF008A3871 /* AboutWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D232A0B2383EEDF008A3871 /* AboutWindowController.m */; };
 		5D8655B2236FD3F2007D70ED /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D8655B1236FD3F2007D70ED /* AppDelegate.m */; };
@@ -28,16 +23,6 @@
 /* Begin PBXFileReference section */
 		5D2329E723828F4C008A3871 /* ApplicationMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationMenuItem.h; sourceTree = "<group>"; };
 		5D2329E823828F4C008A3871 /* ApplicationMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApplicationMenuItem.m; sourceTree = "<group>"; };
-		5D2329ED23829016008A3871 /* NSDate+common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+common.h"; sourceTree = "<group>"; };
-		5D2329EE23829016008A3871 /* NSUserDefaults+KeyPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSUserDefaults+KeyPath.m"; sourceTree = "<group>"; };
-		5D2329EF23829016008A3871 /* NSAlert+Block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSAlert+Block.h"; sourceTree = "<group>"; };
-		5D2329F023829016008A3871 /* NSNumber+Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+Addition.h"; sourceTree = "<group>"; };
-		5D2329F123829016008A3871 /* NSImage+Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+Addition.m"; sourceTree = "<group>"; };
-		5D2329F223829016008A3871 /* NSDate+common.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+common.m"; sourceTree = "<group>"; };
-		5D2329F323829016008A3871 /* NSUserDefaults+KeyPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSUserDefaults+KeyPath.h"; sourceTree = "<group>"; };
-		5D2329F423829016008A3871 /* NSNumber+Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+Addition.m"; sourceTree = "<group>"; };
-		5D2329F523829016008A3871 /* NSAlert+Block.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSAlert+Block.m"; sourceTree = "<group>"; };
-		5D2329F623829016008A3871 /* NSImage+Addition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+Addition.h"; sourceTree = "<group>"; };
 		5D232A0A2383EEDF008A3871 /* AboutWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutWindowController.xib; sourceTree = "<group>"; };
 		5D232A0B2383EEDF008A3871 /* AboutWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AboutWindowController.m; sourceTree = "<group>"; };
 		5D232A0C2383EEDF008A3871 /* AboutWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AboutWindowController.h; sourceTree = "<group>"; };
@@ -70,23 +55,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5D2329EC23829016008A3871 /* Category */ = {
-			isa = PBXGroup;
-			children = (
-				5D2329ED23829016008A3871 /* NSDate+common.h */,
-				5D2329EE23829016008A3871 /* NSUserDefaults+KeyPath.m */,
-				5D2329EF23829016008A3871 /* NSAlert+Block.h */,
-				5D2329F023829016008A3871 /* NSNumber+Addition.h */,
-				5D2329F123829016008A3871 /* NSImage+Addition.m */,
-				5D2329F223829016008A3871 /* NSDate+common.m */,
-				5D2329F323829016008A3871 /* NSUserDefaults+KeyPath.h */,
-				5D2329F423829016008A3871 /* NSNumber+Addition.m */,
-				5D2329F523829016008A3871 /* NSAlert+Block.m */,
-				5D2329F623829016008A3871 /* NSImage+Addition.h */,
-			);
-			path = Category;
-			sourceTree = "<group>";
-		};
 		5D232A092383EEDF008A3871 /* About */ = {
 			isa = PBXGroup;
 			children = (
@@ -117,7 +85,6 @@
 			isa = PBXGroup;
 			children = (
 				5D232A092383EEDF008A3871 /* About */,
-				5D2329EC23829016008A3871 /* Category */,
 				5D2329E723828F4C008A3871 /* ApplicationMenuItem.h */,
 				5D2329E823828F4C008A3871 /* ApplicationMenuItem.m */,
 				5DC889E0237E9395009810C0 /* URLContent.h */,
@@ -209,17 +176,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5D2329FA23829016008A3871 /* NSNumber+Addition.m in Sources */,
-				5D2329F723829016008A3871 /* NSUserDefaults+KeyPath.m in Sources */,
 				5D8655B5236FD3F2007D70ED /* ViewController.m in Sources */,
-				5D2329FB23829016008A3871 /* NSAlert+Block.m in Sources */,
 				5DC889DB237E9208009810C0 /* HTDevice.m in Sources */,
-				5D2329F823829016008A3871 /* NSImage+Addition.m in Sources */,
 				5DC889DE237E9275009810C0 /* HTAppInfo.m in Sources */,
 				5D232A132383EEDF008A3871 /* AboutWindowController.m in Sources */,
 				5DC889E1237E9395009810C0 /* URLContent.m in Sources */,
 				5D8655BD236FD3F3007D70ED /* main.m in Sources */,
-				5D2329F923829016008A3871 /* NSDate+common.m in Sources */,
 				5D2329E923828F4C008A3871 /* ApplicationMenuItem.m in Sources */,
 				5D8655B2236FD3F2007D70ED /* AppDelegate.m in Sources */,
 			);
