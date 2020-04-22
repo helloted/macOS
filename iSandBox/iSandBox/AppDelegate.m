@@ -44,39 +44,6 @@ NSInteger const about_Tag = 990;
     // Insert code here to tear down your application
 }
 
-//- (void)pickFile{
-//    
-//    NSOpenPanel* panel = [NSOpenPanel openPanel];
-//    
-//    NSURL *url = [NSURL URLWithString:@"file:///Applications"];
-//    [panel setDirectoryURL:url];
-//    [panel setAllowsMultipleSelection:NO];  //是否允许多选file
-//    [panel setCanChooseFiles:YES];
-//    [panel setCanChooseDirectories:NO];
-//    
-//    [panel setTitle:@"选择Xcode应用程序"];
-//    
-//    [panel beginWithCompletionHandler:^(NSInteger result) {
-//        if (result == NSModalResponseOK) {
-//
-//            
-//            NSLog(@"panelurl==%@",panel.URL.path);
-//            
-//            NSURL *appInfoPath = [panel.URL URLByAppendingPathComponent:@"Contents/Info.plist"];
-//            NSDictionary *infoDict = [NSDictionary dictionaryWithContentsOfURL:appInfoPath];
-//            NSString *bundleId = infoDict[@"CFBundleIdentifier"];
-//            if ([bundleId isEqualToString:@"com.apple.dt.Xcode"]) {
-//                NSData *bookmarkData =[panel.URL bookmarkDataWithOptions:NSURLBookmarkCreationWithSecurityScope includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
-//                [[NSUserDefaults standardUserDefaults] setValue:bookmarkData forKey:XcodeAppPath];
-//                
-//                [self reloadAppMuenuIfPrepared];
-//            }
-//
-//        }
-//        
-//    }];
-//}
-
 - (void)reloadAppMuenuIfPrepared{
     NSURL *xcodeURL = [NSURL URLWithString:@"file:///Applications/Xcode.app"];
     NSURL *appInfoPath = [xcodeURL URLByAppendingPathComponent:@"/Contents/Info.plist"];
@@ -242,7 +209,38 @@ NSInteger const about_Tag = 990;
     [self.mainMenu addItemWithTitle:@"退出" action:@selector(terminate:) keyEquivalent:@"q"];
 }
 
-
+//- (void)pickFile{
+//
+//    NSOpenPanel* panel = [NSOpenPanel openPanel];
+//
+//    NSURL *url = [NSURL URLWithString:@"file:///Applications"];
+//    [panel setDirectoryURL:url];
+//    [panel setAllowsMultipleSelection:NO];  //是否允许多选file
+//    [panel setCanChooseFiles:YES];
+//    [panel setCanChooseDirectories:NO];
+//
+//    [panel setTitle:@"选择Xcode应用程序"];
+//
+//    [panel beginWithCompletionHandler:^(NSInteger result) {
+//        if (result == NSModalResponseOK) {
+//
+//
+//            NSLog(@"panelurl==%@",panel.URL.path);
+//
+//            NSURL *appInfoPath = [panel.URL URLByAppendingPathComponent:@"Contents/Info.plist"];
+//            NSDictionary *infoDict = [NSDictionary dictionaryWithContentsOfURL:appInfoPath];
+//            NSString *bundleId = infoDict[@"CFBundleIdentifier"];
+//            if ([bundleId isEqualToString:@"com.apple.dt.Xcode"]) {
+//                NSData *bookmarkData =[panel.URL bookmarkDataWithOptions:NSURLBookmarkCreationWithSecurityScope includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
+//                [[NSUserDefaults standardUserDefaults] setValue:bookmarkData forKey:XcodeAppPath];
+//
+//                [self reloadAppMuenuIfPrepared];
+//            }
+//
+//        }
+//
+//    }];
+//}
 
 
 - (void)appAbout{
