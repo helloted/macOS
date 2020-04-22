@@ -88,22 +88,56 @@ NSInteger const about_Tag = 990;
     [self reloadAppMuenuIfPrepared];
 }
 
+
+- (NSString *)runShellCommand:(NSString *)launchPath arguments:(NSArray<NSString *> *)arguments{
+    if (launchPath.length > 0) {
+        FILE* fp = NULL;
+        char cmd[512];
+        NSString *resultStr = @"";
+        sprintf(cmd, "%s %s ; echo $?", [launchPath UTF8String], [(arguments ? [arguments componentsJoinedByString:@" "]  : @"") UTF8String]);
+        NSString *cmdStr = nil;
+        if ((fp = popen(cmd, "r")) != NULL)
+        {
+            while (fgets(cmd, sizeof(cmd), fp) != NULL) {
+                if (cmd[strlen(cmd) - 1] == '\n') {
+                    cmd[strlen(cmd) - 1] = '\0'; //去除换行符
+                }
+                cmdStr = [NSString stringWithUTF8String:cmd];
+                if (![@"0" isEqualToString:cmdStr]) {
+                    resultStr = [resultStr stringByAppendingString:cmdStr];
+                }
+            }
+            //            fgets(cmd, sizeof(cmd), fp);
+            pclose(fp);
+        }
+        
+        //0 成功， 1 失败
+//        printf("resultStr is %s\n", [resultStr UTF8String]);
+        return resultStr;
+    }
+    return @"";
+}
+
+
 - (void)rebuildMenuWithXcodeURL:(NSURL *)xcodeURL{
     dispatch_async(dispatch_queue_create("SimulatorManagerQueue", DISPATCH_QUEUE_SERIAL), ^{
-        NSTask *task = [NSTask new];
-        NSString *path = [NSString stringWithFormat:@"%@/Contents/Developer/usr/bin/simctl",xcodeURL.path];
-        
-        [task setLaunchPath:path];
-        [task setArguments: @[@"list", @"-j", @"devices"]];
-        
-        NSPipe *output = [NSPipe new];
-        task.standardOutput = output;
-
-        [task launch];
-        [task waitUntilExit];
-
-
-        NSData *data = output.fileHandleForReading.readDataToEndOfFile;
+//        NSTask *task = [NSTask new];
+//        NSString *path = [NSString stringWithFormat:@"%@/Contents/Developer/usr/bin/simctl",xcodeURL.path];
+//
+//        [task setLaunchPath:path];
+//        [task setArguments: @[@"list", @"-j", @"devices"]];
+//
+//        NSPipe *output = [NSPipe new];
+//        task.standardOutput = output;
+//
+//        [task launch];
+//        [task waitUntilExit];
+//
+//
+//        NSData *data = output.fileHandleForReading.readDataToEndOfFile;
+//        NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        NSString *jsonString = [self runShellCommand:@"/Applications/Xcode.app/Contents/Developer/usr/bin/simctl" arguments:@[@"list", @"-j", @"devices"]];
+        NSData *data = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
         NSDictionary *resultJson = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
         if ([resultJson isKindOfClass:[NSDictionary class]] == NO) {
             return;
@@ -199,9 +233,9 @@ NSInteger const about_Tag = 990;
     aboutItem.target = self;
     [self.mainMenu addItem:aboutItem];
     
-//    NSMenuItem *prefeItem  = [[NSMenuItem alloc] initWithTitle:@"选择Xcode路径" action:@selector(pickFile) keyEquivalent:@"p"];
-//    prefeItem.target = self;
-//    [self.mainMenu addItem:prefeItem];
+    NSMenuItem *prefeItem  = [[NSMenuItem alloc] initWithTitle:@"选择Xcode路径" action:@selector(pickFile) keyEquivalent:@"p"];
+    prefeItem.target = self;
+    [self.mainMenu addItem:prefeItem];
 
     [self.mainMenu addItem:[NSMenuItem separatorItem]];
     
