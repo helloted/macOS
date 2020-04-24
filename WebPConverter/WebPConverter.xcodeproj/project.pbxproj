@@ -16,6 +16,8 @@
 		5DE0099B2451B73700FB6833 /* libwebpmux.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DE009982451B73600FB6833 /* libwebpmux.a */; };
 		5DE0099C2451B73700FB6833 /* libwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DE009992451B73700FB6833 /* libwebp.a */; };
 		5DE0099D2451B73700FB6833 /* libwebpdemux.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DE0099A2451B73700FB6833 /* libwebpdemux.a */; };
+		5DE009A12452CDC000FB6833 /* NSProgressIndicator+ESSProgressIndicatorCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DE0099F2452CDC000FB6833 /* NSProgressIndicator+ESSProgressIndicatorCategory.m */; };
+		5DE009A4245306F000FB6833 /* HTWindowsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DE009A3245306F000FB6833 /* HTWindowsController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +42,10 @@
 		5DE009992451B73700FB6833 /* libwebp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwebp.a; sourceTree = "<group>"; };
 		5DE0099A2451B73700FB6833 /* libwebpdemux.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libwebpdemux.a; sourceTree = "<group>"; };
 		5DE0099E2451BA1B00FB6833 /* WebPConverter.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = WebPConverter.entitlements; path = WebPConverter/WebPConverter.entitlements; sourceTree = "<group>"; };
+		5DE0099F2452CDC000FB6833 /* NSProgressIndicator+ESSProgressIndicatorCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSProgressIndicator+ESSProgressIndicatorCategory.m"; sourceTree = "<group>"; };
+		5DE009A02452CDC000FB6833 /* NSProgressIndicator+ESSProgressIndicatorCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSProgressIndicator+ESSProgressIndicatorCategory.h"; sourceTree = "<group>"; };
+		5DE009A2245306F000FB6833 /* HTWindowsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTWindowsController.h; sourceTree = "<group>"; };
+		5DE009A3245306F000FB6833 /* HTWindowsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTWindowsController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +83,8 @@
 			isa = PBXGroup;
 			children = (
 				5DE009902451B5CF00FB6833 /* webp */,
+				5DE009A02452CDC000FB6833 /* NSProgressIndicator+ESSProgressIndicatorCategory.h */,
+				5DE0099F2452CDC000FB6833 /* NSProgressIndicator+ESSProgressIndicatorCategory.m */,
 				5DE0098E2451B5CE00FB6833 /* WebPImage.h */,
 				5DE0098F2451B5CF00FB6833 /* WebPImage.m */,
 				5DE0097324518D7900FB6833 /* AppDelegate.h */,
@@ -87,6 +95,8 @@
 				5DE0097B24518D7A00FB6833 /* Main.storyboard */,
 				5DE0097E24518D7A00FB6833 /* Info.plist */,
 				5DE0097F24518D7A00FB6833 /* main.m */,
+				5DE009A2245306F000FB6833 /* HTWindowsController.h */,
+				5DE009A3245306F000FB6833 /* HTWindowsController.m */,
 			);
 			path = WebPConverter;
 			sourceTree = "<group>";
@@ -177,7 +187,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DE0097824518D7900FB6833 /* ViewController.m in Sources */,
+				5DE009A4245306F000FB6833 /* HTWindowsController.m in Sources */,
 				5DE0098024518D7A00FB6833 /* main.m in Sources */,
+				5DE009A12452CDC000FB6833 /* NSProgressIndicator+ESSProgressIndicatorCategory.m in Sources */,
 				5DE0097524518D7900FB6833 /* AppDelegate.m in Sources */,
 				5DE009972451B5CF00FB6833 /* WebPImage.m in Sources */,
 			);

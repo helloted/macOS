@@ -9,8 +9,11 @@
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "WebPImage.h"
+#import "HTWindowsController.h"
 
 @interface AppDelegate ()
+
+@property(nonatomic,strong) NSWindow *window1;
 
 @end
 
@@ -62,6 +65,17 @@
 
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    HTWindowsController *windowController = [[HTWindowsController alloc]init];
+    [windowController showWindow:nil];
+    [windowController.window makeKeyAndOrderFront:nil];
+//    NSApplication.sharedApplication.mainWindow = windowController.window;
+//    window.titlebarAppearsTransparent= YES;
+//    window.titleVisibility=NSWindowTitleHidden;
+//    [window makeKeyAndOrderFront:self];
+//    [window center];
+//
+//    ViewController *vc = (ViewController *)NSApplication.sharedApplication.mainWindow.windowController.contentViewController;
+
 
 }
 
