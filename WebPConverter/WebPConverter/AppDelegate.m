@@ -13,14 +13,14 @@
 
 @interface AppDelegate ()
 
-@property(nonatomic,strong) NSWindow *window1;
-
 @end
 
 @implementation AppDelegate
 
 -(BOOL)application:(NSApplication *)theApplication openFile:(NSString *)fileName{
     [self convertWithFile:fileName];
+    ViewController *vc = (ViewController *)self.mainWindow.contentViewController;
+    [vc convertFrom:fileName];
     return YES;
 }
 
@@ -65,23 +65,22 @@
 
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    HTWindowsController *windowController = [[HTWindowsController alloc]init];
-    [windowController showWindow:nil];
-    [windowController.window makeKeyAndOrderFront:nil];
-//    NSApplication.sharedApplication.mainWindow = windowController.window;
-//    window.titlebarAppearsTransparent= YES;
-//    window.titleVisibility=NSWindowTitleHidden;
-//    [window makeKeyAndOrderFront:self];
-//    [window center];
-//
-//    ViewController *vc = (ViewController *)NSApplication.sharedApplication.mainWindow.windowController.contentViewController;
-
-
+    [self.mainWindow center];
+    [self.mainWindow orderFront:nil];
 }
 
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
     // Insert code here to tear down your application
+}
+
+-(NSWindow *)mainWindow{
+    if (!_mainWindow) {
+        NSUInteger style = NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable ;
+        _mainWindow = [[NSWindow alloc]initWithContentRect:CGRectMake(0, 0, 200, 300) styleMask:style backing:NSBackingStoreBuffered defer:YES];
+        _mainWindow.contentViewController = [[ViewController alloc]init];
+    }
+    return _mainWindow;
 }
 
 @end

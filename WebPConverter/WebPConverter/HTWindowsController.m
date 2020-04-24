@@ -16,8 +16,6 @@
 
 - (void)windowDidLoad {
     [super windowDidLoad];
-    
-    
 }
 
 @end

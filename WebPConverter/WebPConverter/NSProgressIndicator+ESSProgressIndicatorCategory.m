@@ -52,7 +52,7 @@ static ESSProgressBarAnimation *anim = nil;
 - (instancetype)initWithProgressBar:(NSProgressIndicator *)ind
 					 newDoubleValue:(double)val
 {
-	if (self = [super initWithDuration:0.5 animationCurve:NSAnimationLinear])
+	if (self = [super initWithDuration:0.3 animationCurve:NSAnimationLinear])
 	{
 		self.progInd = ind;
 		self.initialValue = self.progInd.doubleValue;

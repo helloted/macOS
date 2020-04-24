@@ -10,7 +10,7 @@
 
 @interface ViewController : NSViewController
 
-- (void)logSome:(NSString *)str;
+- (void)convertFrom:(NSString *)str;
 
 @end
 
