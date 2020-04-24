@@ -19,7 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5DE0097024518D7900FB6833 /* WebPConverter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebPConverter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5DE0097024518D7900FB6833 /* WebP2PNG.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebP2PNG.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5DE0097324518D7900FB6833 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5DE0097424518D7900FB6833 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5DE0097624518D7900FB6833 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -68,7 +68,7 @@
 		5DE0097124518D7900FB6833 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5DE0097024518D7900FB6833 /* WebPConverter.app */,
+				5DE0097024518D7900FB6833 /* WebP2PNG.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -124,7 +124,7 @@
 			);
 			name = WebPConverter;
 			productName = WebPConverter;
-			productReference = 5DE0097024518D7900FB6833 /* WebPConverter.app */;
+			productReference = 5DE0097024518D7900FB6833 /* WebP2PNG.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -325,7 +325,7 @@
 					"$(PROJECT_DIR)/WebPConverter/webp",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.helloted.WebPConverter;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = WebP2PNG;
 			};
 			name = Debug;
 		};
@@ -348,7 +348,7 @@
 					"$(PROJECT_DIR)/WebPConverter/webp",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.helloted.WebPConverter;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = WebP2PNG;
 			};
 			name = Release;
 		};

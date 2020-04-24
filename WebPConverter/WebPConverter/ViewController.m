@@ -12,6 +12,7 @@
 @interface ViewController()
 
 @property (nonatomic, strong)NSText     *showText;
+@property (nonatomic, strong)NSImageView     *imageView;
 
 @end
 
@@ -24,6 +25,9 @@
     [self.view addSubview:_showText];
     
     [self logSome:@"/Users/haozhicao/Downloads/1667c35f570ad22a.webp"];
+    
+    
+    
 
 }
 
@@ -37,13 +41,13 @@
 
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSData * imageData = [fileManager contentsAtPath:filePath];
-    CGImageRef imageRef3x = nil;
+    CGImageRef imageRef = nil;
     NSSize imageSize = NSMakeSize(0, 0);
 
     if (([type isEqualToString:@"webp"])) {
-        imageRef3x = CreateImageForData(imageData);
-        imageSize.height = CGImageGetHeight(imageRef3x);
-        imageSize.width = CGImageGetWidth(imageRef3x);
+        imageRef = CreateImageForData(imageData);
+        imageSize.height = CGImageGetHeight(imageRef);
+        imageSize.width = CGImageGetWidth(imageRef);
     }
 
     NSArray<NSString *> * arr = [filePath componentsSeparatedByString:@"/"];
@@ -52,10 +56,19 @@
         [address appendFormat:@"%@/",arr[i]];
     }
     
+    NSRect imageRect = NSMakeRect(0.0, 0.0, 0.0, 0.0);
+    imageRect.size.height = CGImageGetHeight(imageRef);
+    imageRect.size.width = CGImageGetWidth(imageRef);
+    
+    NSImage *newImage = [[NSImage alloc] initWithCGImage:imageRef size:imageRect.size];
+    _imageView = [[NSImageView alloc]initWithFrame:self.view.bounds];
+    [self.view addSubview:_imageView];
+    _imageView.image = newImage;
+    
     [fileManager createFileAtPath:address contents:nil attributes:nil];
     dispatch_async(dispatch_get_main_queue(), ^{
        NSString *pathOf3x = [NSString stringWithFormat:@"%@/%@.png",address,fileName];
-       saveImagePngToFile(imageRef3x, pathOf3x);
+       saveImagePngToFile(imageRef, pathOf3x);
     });
 }
 
