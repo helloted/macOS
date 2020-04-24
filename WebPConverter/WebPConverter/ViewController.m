@@ -23,7 +23,7 @@
     _showText = [[NSText alloc]initWithFrame:CGRectMake(0, 0, 200, 100)];
     [self.view addSubview:_showText];
     
-//    [self logSome:@"/Users/haozhicao/Downloads/1667c35f570ad22a.webp"];
+    [self logSome:@"/Users/haozhicao/Downloads/1667c35f570ad22a.webp"];
 
 }
 
