@@ -51,4 +51,58 @@ CGImageRef CreateImageForData(NSData * fileData)
     return imageRef;
 }
 
+CGImageRef createCGImageRefFromNSImage(NSImage* image)
+{
+    NSData *imageData;
+    CGImageRef imageRef;
+    @try {
+        imageData = [image TIFFRepresentation];
+        if (imageData) {
+            CGImageSourceRef imageSource = CGImageSourceCreateWithData((CFDataRef)imageData, NULL);
+            NSDictionary* options = [NSDictionary dictionaryWithObjectsAndKeys:
+                                     (id)kCFBooleanFalse, (id)kCGImageSourceShouldCache,
+                                     (id)kCFBooleanTrue, (id)kCGImageSourceShouldAllowFloat,
+                                     nil];
+            
+            //要用这个带option的 kCGImageSourceShouldCache指出不需要系统做cache操作 默认是会做的
+            imageRef = CGImageSourceCreateImageAtIndex(imageSource, 0, (CFDictionaryRef)options);
+            CFRelease(imageSource);
+            return imageRef;
+        }else{
+            return NULL;
+        }
+    }
+    @catch (NSException *exception) {
+        
+    }
+    @finally {
+        
+    }
+    
+    return NULL;
+}
 
+BOOL saveImagepng(CGImageRef imageRef, NSString *strpath)
+{
+    NSString *finalPath = [NSString stringWithString:strpath];
+    CFURLRef url = CFURLCreateWithFileSystemPath (
+                                                  kCFAllocatorDefault,
+                                                  (CFStringRef)finalPath,
+                                                  kCFURLPOSIXPathStyle,
+                                                  false);
+    CGImageDestinationRef dest = CGImageDestinationCreateWithURL(url, CFSTR("public.png"), 1,NULL);
+    assert(dest);
+    CGImageDestinationAddImage(dest, imageRef, NULL);
+    assert(dest);
+    if (dest == NULL) {
+        NSLog(@"CGImageDestinationCreateWithURL failed");
+    }
+    //NSLog(@"%@", dest);
+    assert(CGImageDestinationFinalize(dest));
+    
+    //这三句话用来释放对象
+    CFRelease(dest);
+    //CGImageRelease(imageRef);
+    CFRelease(url);
+    return YES;
+}

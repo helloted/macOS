@@ -9,3 +9,5 @@
 #import <Cocoa/Cocoa.h>
 
 CGImageRef CreateImageForData(NSData * fileData);
+CGImageRef createCGImageRefFromNSImage(NSImage* image);
+BOOL saveImagepng(CGImageRef imageRef, NSString *strpath);

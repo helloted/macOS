@@ -24,11 +24,10 @@
     _showText = [[NSText alloc]initWithFrame:CGRectMake(0, 0, 200, 100)];
     [self.view addSubview:_showText];
     
-    [self logSome:@"/Users/haozhicao/Downloads/1667c35f570ad22a.webp"];
+//    [self logSome:@"/Users/haozhicao/Downloads/1667c35f570ad22a.webp"];
     
+    [self logSome:@"/Users/haozhicao/Downloads/ab.jpeg"];
     
-    
-
 }
 
 
@@ -43,11 +42,21 @@
     NSData * imageData = [fileManager contentsAtPath:filePath];
     CGImageRef imageRef = nil;
     NSSize imageSize = NSMakeSize(0, 0);
+    
+    if (([type isEqualToString:@"png"]) || ([type isEqualToString:@"jpg"]) || ([type isEqualToString:@"jpeg"]) ) {
+        NSImage * pendingImage = [[NSImage alloc]initWithData:imageData];
+        imageSize = pendingImage.size;
+        imageRef = createCGImageRefFromNSImage(pendingImage);
+    }
 
     if (([type isEqualToString:@"webp"])) {
         imageRef = CreateImageForData(imageData);
         imageSize.height = CGImageGetHeight(imageRef);
         imageSize.width = CGImageGetWidth(imageRef);
+    }
+    
+    if (imageRef == NULL) {
+        return;
     }
 
     NSArray<NSString *> * arr = [filePath componentsSeparatedByString:@"/"];
@@ -68,33 +77,8 @@
     [fileManager createFileAtPath:address contents:nil attributes:nil];
     dispatch_async(dispatch_get_main_queue(), ^{
        NSString *pathOf3x = [NSString stringWithFormat:@"%@/%@.png",address,fileName];
-       saveImagePngToFile(imageRef, pathOf3x);
+       saveImagepng(imageRef, pathOf3x);
     });
-}
-
-BOOL saveImagePngToFile(CGImageRef imageRef, NSString *strpath)
-{
-    NSString *finalPath = [NSString stringWithString:strpath];
-    CFURLRef url = CFURLCreateWithFileSystemPath (
-                                                  kCFAllocatorDefault,
-                                                  (CFStringRef)finalPath,
-                                                  kCFURLPOSIXPathStyle,
-                                                  false);
-    CGImageDestinationRef dest = CGImageDestinationCreateWithURL(url, CFSTR("public.png"), 1,NULL);
-    assert(dest);
-    CGImageDestinationAddImage(dest, imageRef, NULL);
-    assert(dest);
-    if (dest == NULL) {
-        NSLog(@"CGImageDestinationCreateWithURL failed");
-    }
-    //NSLog(@"%@", dest);
-    assert(CGImageDestinationFinalize(dest));
-    
-    //这三句话用来释放对象
-    CFRelease(dest);
-    //CGImageRelease(imageRef);
-    CFRelease(url);
-    return YES;
 }
 
 
