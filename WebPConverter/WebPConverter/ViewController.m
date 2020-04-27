@@ -12,35 +12,35 @@
 
 @interface ViewController()
 
-@property (nonatomic, strong)NSText     *showText;
-@property (nonatomic, strong)NSImageView     *imageView;
-@property (nonatomic, strong)NSProgressIndicator      *indicator;
-
 @end
 
 @implementation ViewController
 
 - (void)loadView{
-    self.view = [[NSView alloc]initWithFrame:CGRectMake(0, 0, 440, 50)];
+    self.view = [[NSView alloc]initWithFrame:CGRectMake(0, 0, 440, 300)];
     self.view.wantsLayer = YES;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.layer.backgroundColor = [NSColor whiteColor].CGColor;
+}
+
+// 先viewdidload再走的接受file;
+- (void)actionFromClicked:(NSString *)filePath{
+    [self convertFrom:filePath];
     
-    _showText = [[NSText alloc]initWithFrame:CGRectMake(20, 0, 400, 40)];
-    _showText.alignment = NSTextAlignmentCenter;
-    _showText.editable = NO;
-    [self.view addSubview:_showText];
-    
-//    [self logSome:@"/Users/haozhicao/Downloads/1667c35f570ad22a.webp"];
-    
-//    [self logSome:@"/Users/haozhicao/Downloads/ab.jpeg"];
+    self.view = [[NSView alloc]initWithFrame:CGRectMake(0, 0, 440, 50)];
+    self.view.wantsLayer = YES;
+    self.view.layer.backgroundColor = [NSColor whiteColor].CGColor;
+
     
     
-    _imageView = [[NSImageView alloc]initWithFrame:self.view.bounds];
-    [self.view addSubview:_imageView];
+    NSText *showText = [[NSText alloc]initWithFrame:CGRectMake(20, 0, 400, 40)];
+    showText.alignment = NSTextAlignmentCenter;
+    showText.editable = NO;
+    showText.string = filePath;
+    [self.view addSubview:showText];
     
     
     NSProgressIndicator  *indicator = [[NSProgressIndicator alloc]initWithFrame:CGRectMake(20, 5, 400, 10)];
@@ -51,15 +51,15 @@
     indicator.maxValue = 1000;
     indicator.style = NSProgressIndicatorStyleBar;
     [indicator sizeToFit];
+    [indicator animateToDoubleValue:1000];
     
-    self.indicator = indicator;
-    [self.indicator animateToDoubleValue:1000];
-    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [NSApp terminate:self];
+    });
 }
 
 
 - (void)convertFrom:(NSString *)str{
-    _showText.string = str;
     NSString * filePath = str;
     NSString * exestr = [filePath lastPathComponent];
     NSString *fileName = [exestr stringByDeletingPathExtension];
@@ -100,9 +100,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
        NSString *pathOf3x = [NSString stringWithFormat:@"%@/%@.png",address,fileName];
        saveImagepng(imageRef, pathOf3x);
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [NSApp terminate:self];
-        });
     });
     
     

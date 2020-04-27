@@ -20,7 +20,7 @@
 -(BOOL)application:(NSApplication *)theApplication openFile:(NSString *)fileName{
     [self convertWithFile:fileName];
     ViewController *vc = (ViewController *)self.mainWindow.contentViewController;
-    [vc convertFrom:fileName];
+    [vc actionFromClicked:fileName];
     return YES;
 }
 

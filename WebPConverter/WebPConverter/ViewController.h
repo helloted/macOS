@@ -10,7 +10,7 @@
 
 @interface ViewController : NSViewController
 
-- (void)convertFrom:(NSString *)str;
+- (void)actionFromClicked:(NSString *)filePath;
 
 @end
 
